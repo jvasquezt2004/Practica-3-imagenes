@@ -28,17 +28,37 @@ def plot_color_distributions(frequencies):
     plt.show()
 
 
+def apply_operation(image_array, operation, value):
+    if operation == "sumar":
+        modified_array = np.clip(image_array + value, 0, 255)
+    elif operation == "restar":
+        modified_array = np.clip(image_array - value, 0, 255)
+    elif operation == "multiplicar":
+        modified_array = np.clip(image_array * value, 0, 255)
+    elif operation == "dividir":
+        modified_array = np.clip(image_array / value, 0, 255)
+    else:
+        return image_array
+    return modified_array.astype(np.uint8)
+
+
 def main():
     picture = Image.open("img/image_clear.jpeg")
-    picture_array = np.array(picture.convert("RGB"))
-    picture_array_red, picture_array_green, picture_array_blue = create_arrays(
-        picture_array
+    operation = input(
+        "Que operacion desea realizar? (sunmar, restar, multiplicar, dividir): "
     )
+    value = float(input("Ingrese el valor para la operacion: "))
 
-    arrays = [picture_array_red, picture_array_green, picture_array_blue]
+    picture_array = np.array(picture.convert("RGB"))
+    modified_array = apply_operation(picture_array, operation, value)
+
+    arrays = create_arrays(modified_array)
     frequencies = calculate_frequencies(arrays)
 
     plot_color_distributions(frequencies)
+
+    modified_image = Image.fromarray(modified_array)
+    modified_image.show()
 
 
 if __name__ == "__main__":
