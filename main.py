@@ -65,14 +65,23 @@ def apply_operation(image_array, operation, value=1.0):
 
 def main():
     picture = Image.open("img/image_clear.jpeg")
+    picture_array = np.array(picture.convert("RGB"))
+
+    print("Histograma e imagen original")
+    original_arrays = create_arrays(picture_array)
+    original_frequencies = calculate_frequencies(original_arrays)
+    plot_color_distributions(original_frequencies)
+    plt.imshow(picture)
+    plt.title("Imagen original")
+    plt.show()
+
     operation = input(
-        "Que operacion desea realizar? (sunmar, restar, multiplicar, dividir, gamma, inversa, ecualizacion): "
+        "Que operacion desea realizar? (sumar, restar, multiplicar, dividir, gamma, inversa, ecualizacion): "
     )
     value = 1.0
-    if operation in ["sunmar", "restar", "multiplicar", "dividir", "gamma", "inversa"]:
+    if operation in ["sumar", "restar", "multiplicar", "dividir", "gamma", "inversa"]:
         value = float(input("Ingrese el valor para la operacion: "))
 
-    picture_array = np.array(picture.convert("RGB"))
     modified_array = apply_operation(picture_array, operation, value)
 
     arrays = create_arrays(modified_array)
@@ -81,7 +90,9 @@ def main():
     plot_color_distributions(frequencies)
 
     modified_image = Image.fromarray(modified_array)
-    modified_image.show()
+    plt.imshow(modified_image)
+    plt.title("Imagen modificada")
+    plt.show()
 
 
 if __name__ == "__main__":
